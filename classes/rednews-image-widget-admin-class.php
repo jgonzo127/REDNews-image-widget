@@ -38,7 +38,7 @@ class Rednews_Image_Widget_Admin {
 
 		// REDNews Image widget Admin CSS.
 		wp_register_style(
-			'mm-components-admin',
+			'rednews-image-widget-admin',
 			REDNEWSIMAGE_URL . 'css/rednews-image-widget-admin.css',
 			array(),
 			REDNEWSIMAGE_VERSION
@@ -57,6 +57,7 @@ class Rednews_Image_Widget_Admin {
 		if ( 'widgets.php' === $hook ) {
 			wp_enqueue_media();
 			wp_enqueue_script( 'rednews-image-widget-admin' );
+			wp_enqueue_style( 'rednews-image-widget-admin' );
 		}
 	}
 }

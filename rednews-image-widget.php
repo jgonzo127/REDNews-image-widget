@@ -28,18 +28,9 @@ function rednews_image_widget_scripts_and_styles() {
 	// General styles.
 	wp_enqueue_style(
 		'rednews-image-widget',
-		REDNEWSIMAGE_URL . 'css/rednews-image-widget-admin.css',
+		REDNEWSIMAGE_URL . 'css/rednews-image-widget-public.css',
 		array(),
 		REDNEWSIMAGE_VERSION
-	);
-
-	// General scripts.
-	wp_enqueue_script(
-		'rednews-image-widget',
-		REDNEWSIMAGE_URL . 'js/rednews-image-widget-admin.js',
-		array( 'jquery' ),
-		REDNEWSIMAGE_VERSION,
-		true
 	);
 }
 
