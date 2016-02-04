@@ -1,27 +1,60 @@
 <?php
 
-/**
- * Return an array of registered image sizes.
- *
- * @since   1.0.0
- *
- * @param   string  $context  The context to pass to our filter.
- *
- * @return  array             The array of formatted image sizes.
- */
-function rednews_get_image_sizes( $context = '' ) {
+function rednews_image_widget( $args ) {
 
-	$image_sizes = get_intermediate_image_sizes();
-	$formatted_image_sizes = array();
+	// Set our defaults and use them as needed.
+	$defaults = array(
+		'title'             => '',
+		'image'             => '',
+		'pdf_link'          => '',
+		'image_link_target' => '_self',
+	);
+	$args = wp_parse_args( (array)$args, $defaults );
 
-	foreach ( $image_sizes as $image_size ) {
+	// Get clean param values.
+	$title             = $args['title'];
+	$image             = $args['image'];
+	$pdf_link          = $args['pdf_link'];
+	$image_link_target = $args['image_link_target'];
 
-		$formatted_image_size = ucwords( str_replace( '_', ' ', str_replace( '-', ' ', $image_size ) ) );
-		$formatted_image_sizes[ $image_size ] = $formatted_image_size;
+	// Support the image being an ID or a URL.
+	if ( is_numeric( $image ) ) {
+		$image_array = wp_get_attachment_image_src( $image, 'full' );
+		$image_url   = $image_array[0];
+	} else {
+		$image_url = esc_url( $image );
 	}
 
-	// Manually add in the 'Full' size.
-	$formatted_image_sizes['full'] = __( 'Full', 'mm-components' );
+	if ( is_numeric( $pdf_link ) ) {
+		$pdf_link = wp_get_attachment_url( $pdf_link );
+	} else {
+		$pdf_link = esc_url( $pdf_link );
+	}
 
-	return apply_filters( 'rednews_image_sizes', $formatted_image_sizes, $context );
+	ob_start(); ?>
+
+	<div class="rednews-image-widget-wrap">
+
+		<?php
+
+		echo '<h2>';
+
+		echo $title;
+
+		echo '</h2>';
+
+		printf(
+			'<a href="%s" target="%s"><img src="%s"></a>',
+			esc_url( $pdf_link ),
+			esc_attr( $image_link_target ),
+			esc_attr( $image_url )
+		);
+
+		?>
+
+	</div>
+
+	<?php
+
+	return ob_get_clean();
 }
