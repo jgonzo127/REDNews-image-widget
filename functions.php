@@ -36,12 +36,12 @@ function rednews_image_widget( $args ) {
 	<div class="rednews-image-widget-wrap">
 
 		<?php
-
-		echo '<h2>';
-
-		echo $title;
-
-		echo '</h2>';
+		if ( ! empty( $title ) ) {
+			printf(
+				'<h2></h2>',
+				esc_html( $title )
+			);
+		}
 
 		printf(
 			'<a href="%s" target="%s"><img src="%s"></a>',
@@ -49,7 +49,6 @@ function rednews_image_widget( $args ) {
 			esc_attr( $image_link_target ),
 			esc_attr( $image_url )
 		);
-
 		?>
 
 	</div>
