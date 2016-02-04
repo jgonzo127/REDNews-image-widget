@@ -17,7 +17,7 @@ define( 'REDNEWSIMAGE_URL', plugin_dir_url( __FILE__ ) );
 // Include general functionality.
 require_once REDNEWSIMAGE_PATH . 'functions.php';
 
-add_action( 'wp_enqueue_scripts', 'rednews_image_widget_scripts_and_styles' );
+/*add_action( 'wp_enqueue_scripts', 'rednews_image_widget_scripts_and_styles' );
 /**
  * Enqueue front-end scripts and styles.
  *
@@ -48,7 +48,7 @@ function rednews_image_widget( $args ) {
 	$defaults = array(
 		'title'             => '',
 		'image'             => '',
-		'image_link'        => '',
+		'pdf_link'        => '',
 		'image_link_target' => '_self',
 	);
 	$args = wp_parse_args( (array)$args, $defaults );
@@ -56,7 +56,7 @@ function rednews_image_widget( $args ) {
 	// Get clean param values.
 	$title             = $args['title'];
 	$image             = $args['image'];
-	$image_link        = $args['image_link'];
+	$pdf_link          = $args['pdf_link'];
 	$image_link_target = $args['image_link_target'];
 
 	// Support the image being an ID or a URL.
@@ -65,6 +65,12 @@ function rednews_image_widget( $args ) {
 		$image_url   = $image_array[0];
 	} else {
 		$image_url = esc_url( $image );
+	}
+
+	if ( is_numeric( $pdf_link ) ) {
+		$pdf_link = wp_get_attachment_url( $pdf_link );
+	} else {
+		$pdf_link = esc_url( $pdf_link );
 	}
 
 	ob_start(); ?>
@@ -81,7 +87,7 @@ function rednews_image_widget( $args ) {
 
 		printf(
 			'<a href="%s" target="%s"><img src="%s"></a>',
-			esc_url( $image_link ),
+			esc_url( $pdf_link ),
 			esc_attr( $image_link_target ),
 			esc_attr( $image_url )
 		);
@@ -173,7 +179,7 @@ class Rednews_Image_Widget extends WP_Widget {
 		$defaults = array(
 			'title'             => '',
 			'image'             => '',
-			'image_link'        => '',
+			'pdf_link'          => '',
 			'image_link_target' => '_self',
 		);
 
@@ -203,7 +209,7 @@ class Rednews_Image_Widget extends WP_Widget {
 		$defaults = array(
 			'title'             => '',
 			'image'             => '',
-			'image_link'        => '',
+			'pdf_link'        => '',
 			'image_link_target' => '_self',
 		);
 
@@ -212,7 +218,7 @@ class Rednews_Image_Widget extends WP_Widget {
 
 		$title             = $instance['title'];
 		$image             = $instance['image'];
-		$image_link        = $instance['image_link'];
+		$pdf_link          = $instance['pdf_link'];
 		$image_link_target = $instance['image_link_target'];
 
 		// Title.
@@ -233,13 +239,13 @@ class Rednews_Image_Widget extends WP_Widget {
 			$image
 		);
 
-		// Image link.
-		$this->field_text(
-			__( 'Image Link', 'rednews-image-widget' ),
-			__( 'Input the PDF link for this property.', 'rednews-image-widget' ),
-			'rednews-link widefat',
-			'image_link',
-			$image_link
+		// PDF link.
+		$this->field_single_file(
+			__( 'PDF Upload:', 'rednews-image-widget' ),
+			__( 'Select the PDF that this property links to.', 'rednews-image-widget' ),
+			'rednews-pdf-link widefat',
+			'pdf_link',
+			$pdf_link
 		);
 
 		// Image link target.
@@ -271,7 +277,7 @@ class Rednews_Image_Widget extends WP_Widget {
 		$instance                      = $old_instance;
 		$instance['title']             = sanitize_text_field( $new_instance['title'] );
 		$instance['image']             = sanitize_text_field( $new_instance['image'] );
-		$instance['image_link']        = sanitize_text_field( $new_instance['image_link'] );
+		$instance['pdf_link']        = sanitize_text_field( $new_instance['pdf_link'] );
 		$instance['image_link_target'] = sanitize_text_field( $new_instance['image_link_target'] );
 
 		return $instance;
@@ -332,6 +338,45 @@ class Rednews_Image_Widget extends WP_Widget {
 				<input type="hidden" name="<?php echo $this->get_field_name( $key ); ?>" class="rednews-single-media-image" class="regular-text" value="<?php echo esc_attr( $value ); ?>" />
 				<input type="button" name="upload-btn" class="upload-btn button-secondary" value="<?php _e( 'Select Image', 'rednews-image-widget' ); ?>" />
 				<input type="button" name="clear-btn" class="clear-btn button-secondary" value="<?php _e( 'Clear', 'rednews-image-widget' ); ?>" />
+			</span>
+			<?php
+
+			if ( '' !== $description) {
+				printf(
+					'<small class="rednews-description-text">%s</small>',
+					esc_html( $description )
+				);
+			}
+
+		echo '</p>';
+	}
+
+	/**
+	 * Output a single media file upload field.
+	 *
+	 * @since  1.0.0
+	 */
+	public function field_single_file( $label = '', $description = '', $classes = '', $key = '', $value = '' ) {
+
+		if ( is_numeric( $value ) ) {
+			$file = wp_get_attachment_url( (int)$value );
+		} else {
+			$file = '';
+		}
+
+		echo '<p class="rednews-single-file-media-field-wrap">';
+
+			echo '<label>' . esc_html( $label ) . '</label><br />';
+
+			?>
+			<span class="rednews-single-file-media-wrap">
+				<span class="rednews-single-file-media-image-preview-wrap <?php echo ( empty( $value ) ) ? 'no-image' : ''; ?>">
+					<span class="rednews-single-file-media-no-image"><?php _e( 'No File Selected', 'rednews-image-widget' ); ?></span>
+					<span class="rednews-single-file-media-image-preview"><?php echo esc_url( $file ); ?></span>
+				</span>
+				<input type="hidden" name="<?php echo $this->get_field_name( $key ); ?>" class="rednews-single-file-media-image" class="regular-text" value="<?php echo esc_attr( $value ); ?>" />
+				<input type="button" name="upload-btn" class="file-upload-btn button-secondary" value="<?php _e( 'Select File', 'rednews-image-widget' ); ?>" />
+				<input type="button" name="clear-btn" class="file-clear-btn button-secondary" value="<?php _e( 'Clear', 'rednews-image-widget' ); ?>" />
 			</span>
 			<?php
 
