@@ -38,7 +38,7 @@ function rednews_image_widget( $args ) {
 		<?php
 		if ( ! empty( $title ) ) {
 			printf(
-				'<h2></h2>',
+				'<h2>%s</h2>',
 				esc_html( $title )
 			);
 		}
