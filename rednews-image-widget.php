@@ -261,6 +261,11 @@ class Rednews_Image_Widget extends WP_Widget {
 
 		if ( is_numeric( $value ) ) {
 			$image = wp_get_attachment_image_src( (int)$value, 'large' );
+			if( ! empty( $image ) ) {
+				$image = $image[0];
+			} else {
+				$image = '';
+			}
 		} else {
 			$image = '';
 		}
