@@ -56,7 +56,7 @@ function rednews_image_widget( $args ) {
 			'rednews-image-widget-button',
 			esc_url( $pdf_link ),
 			esc_attr( $image_link_target ),
-			__( 'Click to view digital issue', 'rednews-image-widget')
+			__( 'Click to View Digital Issue', 'rednews-image-widget')
 		 );
 
 		?>
