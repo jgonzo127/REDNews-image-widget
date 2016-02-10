@@ -5,6 +5,7 @@
 .rednews-image-widget-button:hover {
 	opacity: 0.8%;
 	color: #fff;
+	background-color: rgba( 61, 163, 229, 0.8 );
 }
 
 .rednews-image-widget-button {
