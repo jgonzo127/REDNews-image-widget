@@ -1,0 +1,20 @@
+/**
+ * REDNews Image Widget public CSS.
+ */
+
+.rednews-image-widget-button:hover {
+	opacity: 0.8%;
+	color: #fff;
+}
+
+.rednews-image-widget-button {
+	text-decoration: none;
+	color: #fff;
+	padding: 15px 25px;
+	margin-top: 10px;
+	background-color: #3da3e5;
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+	font-size: 18px;
+}
