@@ -17,7 +17,7 @@ define( 'REDNEWSIMAGE_URL', plugin_dir_url( __FILE__ ) );
 // Include general functionality.
 require_once REDNEWSIMAGE_PATH . 'functions.php';
 
-/*add_action( 'wp_enqueue_scripts', 'rednews_image_widget_scripts_and_styles' );
+add_action( 'wp_enqueue_scripts', 'rednews_image_widget_scripts_and_styles' );
 /**
  * Enqueue front-end scripts and styles.
  *
@@ -218,7 +218,7 @@ class Rednews_Image_Widget extends WP_Widget {
 		$instance                      = $old_instance;
 		$instance['title']             = sanitize_text_field( $new_instance['title'] );
 		$instance['image']             = sanitize_text_field( $new_instance['image'] );
-		$instance['pdf_link']        = sanitize_text_field( $new_instance['pdf_link'] );
+		$instance['pdf_link']          = sanitize_text_field( $new_instance['pdf_link'] );
 		$instance['image_link_target'] = sanitize_text_field( $new_instance['image_link_target'] );
 
 		return $instance;

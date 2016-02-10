@@ -44,11 +44,21 @@ function rednews_image_widget( $args ) {
 		}
 
 		printf(
-			'<a href="%s" target="%s"><img src="%s"></a>',
+			'<a class="%s" href="%s" target="%s"><img src="%s"></a>',
+			'rednews-image-widget-image',
 			esc_url( $pdf_link ),
 			esc_attr( $image_link_target ),
 			esc_attr( $image_url )
 		);
+
+		printf(
+			'<a class="%s" href="%s" target="%s">%s</a>',
+			'rednews-image-widget-button',
+			esc_url( $pdf_link ),
+			esc_attr( $image_link_target ),
+			__( 'Click to view digital issue', 'rednews-image-widget')
+		 );
+
 		?>
 
 	</div>
