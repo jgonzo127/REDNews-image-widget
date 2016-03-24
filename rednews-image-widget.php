@@ -62,13 +62,13 @@ function rednews_image_widget_shortcode( $atts = array(), $content = null ) {
 }
 
 
-add_action( 'widgets_init', 'rednews_register_image_wiget' );
+add_action( 'widgets_init', 'rednews_register_image_widget' );
 /**
  * Register the widget.
  *
  * @since  1.0.0
  */
-function rednews_register_image_wiget() {
+function rednews_register_image_widget() {
 
 	register_widget( 'rednews_image_widget' );
 }
@@ -97,7 +97,7 @@ class Rednews_Image_Widget extends WP_Widget {
 		// Set up the options to pass to the WP_Widget constructor.
 		$this->options = array(
 			'classname'   => 'rednews-image-widget',
-			'description' => __( 'An Image Upload Widget with a PDF link input field for REDNews Properties.', 'rednews-image-widget' ),
+			'description' => __( 'An Image Upload Widget with a link input field for REDNews Digital.', 'rednews-image-widget' ),
 		);
 
 		parent::__construct(
@@ -120,8 +120,8 @@ class Rednews_Image_Widget extends WP_Widget {
 		$defaults = array(
 			'title'             => '',
 			'image'             => '',
-			'pdf_link'          => '',
-			'image_link_target' => '_self',
+			'link'              => '',
+			'image_link_target' => '_blank',
 		);
 
 		// Use our instance args if they are there, otherwise use the defaults.
@@ -150,8 +150,8 @@ class Rednews_Image_Widget extends WP_Widget {
 		$defaults = array(
 			'title'             => '',
 			'image'             => '',
-			'pdf_link'        => '',
-			'image_link_target' => '_self',
+			'link'              => '',
+			'image_link_target' => '_blank',
 		);
 
 		// Use our instance args if they are there, otherwise use the defaults.
@@ -159,7 +159,7 @@ class Rednews_Image_Widget extends WP_Widget {
 
 		$title             = $instance['title'];
 		$image             = $instance['image'];
-		$pdf_link          = $instance['pdf_link'];
+		$link              = $instance['link'];
 		$image_link_target = $instance['image_link_target'];
 
 		// Title.
@@ -180,13 +180,13 @@ class Rednews_Image_Widget extends WP_Widget {
 			$image
 		);
 
-		// PDF link.
-		$this->field_single_file(
-			__( 'PDF Upload:', 'rednews-image-widget' ),
-			__( 'Select the PDF that this property links to.', 'rednews-image-widget' ),
-			'rednews-pdf-link widefat',
-			'pdf_link',
-			$pdf_link
+		// Link.
+		$this->field_text(
+			__( 'Issuu Link', 'rednews-image-widget' ),
+			'',
+			'rednews-issuu-link widefat',
+			'link',
+			$link
 		);
 
 		// Image link target.
@@ -197,8 +197,8 @@ class Rednews_Image_Widget extends WP_Widget {
 			'image_link_target',
 			$image_link_target,
 			array(
-				'_self'  => 'Default',
 				'_blank' => 'New Window',
+				'_self'  => 'Default',
 			)
 		);
 	}
@@ -218,7 +218,7 @@ class Rednews_Image_Widget extends WP_Widget {
 		$instance                      = $old_instance;
 		$instance['title']             = sanitize_text_field( $new_instance['title'] );
 		$instance['image']             = sanitize_text_field( $new_instance['image'] );
-		$instance['pdf_link']          = sanitize_text_field( $new_instance['pdf_link'] );
+		$instance['link']               = sanitize_text_field( $new_instance['link'] );
 		$instance['image_link_target'] = sanitize_text_field( $new_instance['image_link_target'] );
 
 		return $instance;
